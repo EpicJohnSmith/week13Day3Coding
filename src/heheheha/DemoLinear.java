@@ -1,7 +1,9 @@
 package heheheha;
 
-public class DemoLinear {
-    public static void main(String[] args) {
+public class DemoLinear
+{
+    public static void main(String[] args) // Main list to help print stuff out...thanks AI documentation
+    {
 
         HashTableLinear<String,Integer> ht = new HashTableLinear<>(8, 0.7);
 

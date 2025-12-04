@@ -1,15 +1,17 @@
 package heheheha;
 
-public class HashTableLinear<K, V> {
+public class HashTableLinear<K, V>
+{
 
-    private static class Entry<K, V> {
+    private static class Entry<K, V>
+    {
         K key;
         V value;
         Entry(K k, V v) { key = k; value = v; }
         @Override public String toString() { return key + "=" + value; }
     }
 
-    private enum SlotState { EMPTY_SINCE_START, OCCUPIED, EMPTY_AFTER_DELETE }
+    private enum SlotState { EMPTY_SINCE_START, OCCUPIED, EMPTY_AFTER_DELETE } // Still don't know what this is
 
     private Entry<K,V>[] table;
     private SlotState[] states;
@@ -24,7 +26,8 @@ public class HashTableLinear<K, V> {
         initiate();
     }
 
-    public HashTableLinear() {
+    public HashTableLinear()
+    {
         this(16, 0.7);
     }
 
@@ -38,34 +41,41 @@ public class HashTableLinear<K, V> {
             states[i] = SlotState.EMPTY_SINCE_START;
     }
 
-    public int getHashing(K key) {
+    public int getHashing(K key)
+    {
         return Math.floorMod(key.hashCode(), capacity);
     }
 
-    private int probing(int idx) {
+    private int probing(int idx)
+    {
         return (idx + 1) % capacity;
     }
 
-    public void add(K key, V value) {
-        if (key == null) throw new IllegalArgumentException("Null key not allowed");
+    public void add(K key, V value)
+    {
+        if (key == null) throw new IllegalArgumentException("Null key not allowed"); // Needed some help here, got confused
 
         int idx = getHashing(key);
         int start = idx;
         int firstDeleted = -1;
 
-        while (true) {
-            if (states[idx] == SlotState.EMPTY_SINCE_START) {
+        while (true)
+        {
+            if (states[idx] == SlotState.EMPTY_SINCE_START)
+            {
                 if (firstDeleted != -1) idx = firstDeleted;
                 table[idx] = new Entry<>(key, value);
                 states[idx] = SlotState.OCCUPIED;
                 size++;
                 break;
             } 
-            else if (states[idx] == SlotState.EMPTY_AFTER_DELETE) {
+            else if (states[idx] == SlotState.EMPTY_AFTER_DELETE)
+            {
                 if (firstDeleted == -1) firstDeleted = idx;
             } 
             else if (states[idx] == SlotState.OCCUPIED &&
-                     table[idx].key.equals(key)) {
+                     table[idx].key.equals(key))
+            {
                 table[idx].value = value; // update existing
                 return;
             }
@@ -78,7 +88,8 @@ public class HashTableLinear<K, V> {
             resize(capacity * 2);
     }
 
-    public V get(K key) {
+    public V get(K key) // Had no idea what to do here. Needed help
+    {
         int idx = getHashing(key);
         int start = idx;
 
@@ -93,7 +104,8 @@ public class HashTableLinear<K, V> {
         return null;
     }
 
-    public boolean remove(K key) {
+    public boolean remove(K key)
+    {
         int idx = getHashing(key);
         int start = idx;
 
@@ -113,7 +125,8 @@ public class HashTableLinear<K, V> {
     }
 
     @SuppressWarnings("unchecked")
-    private void resize(int newCapacity) {
+    private void resize(int newCapacity)
+    {
         Entry<K,V>[] oldTable = table;
         SlotState[] oldStates = states;
         int oldCap = capacity;
@@ -132,7 +145,8 @@ public class HashTableLinear<K, V> {
         }
     }
 
-    public void printState() {
+    public void printState() // FINALLY! THIS CAN PRINT! YAY!
+    {
         System.out.println("=== HashTableLinear capacity=" +
                 capacity + " size=" + size + " ===");
 
